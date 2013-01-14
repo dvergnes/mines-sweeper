@@ -206,20 +206,25 @@ var controller = (function(model, view) {
 
 	function onclick(row, col) {
 		var cell = m_model.getCell(row, col);
-		if (cell && cell.m_trapped) {
-			alert("Boom ! You loose!");
+		if (cell) {
+			if (cell.m_trapped) {
+				alert("Boom ! You loose!");
+			} else {
+				var cellsToReveal = m_model.reveal(cell);
+				var length = cellsToReveal.length;
+				for ( var i = 0; i < length; i++) {
+					var currentCell = cellsToReveal[i];
+					m_view.reveal(currentCell.x, currentCell.y);
+				}
+				m_cellRevealed += length;
+				if (m_model.getNbCellsForVictory() == m_cellRevealed) {
+					alert("You win!");
+				}
+			}	
 		} else {
-			var cellsToReveal = m_model.reveal(cell);
-			var length = cellsToReveal.length;
-			for ( var i = 0; i < length; i++) {
-				var currentCell = cellsToReveal[i];
-				m_view.reveal(currentCell.x, currentCell.y);
-			}
-			m_cellRevealed += length;
-			if (m_model.getNbCellsForVictory() == m_cellRevealed) {
-				alert("You win!");
-			}
+			console.log("Unable to find cell");
 		}
+		
 	}
 	m_view.registerClickHandler(onclick);
 
