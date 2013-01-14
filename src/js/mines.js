@@ -108,27 +108,37 @@ var view = (function() {
 	var clickHandler;
 	var gameElement = document.getElementById("game");
 
-	function addClickEventListener(element, f) {
+	function addEventListener(element, event, f) {
 		if (element.addEventListener) {
-			element.addEventListener('click', f, false);
+			element.addEventListener(event, f, false);
 		} else if (element.attachEvent) {
-			element.attachEvent('onclick', f);
+			element.attachEvent('on'+event, f);
 		}
 	}
-	addClickEventListener(gameElement, function(e) {
+	addEventListener(gameElement, "mouseup", function(e) {
 		if (!e) {
 			e = window.event;
 		}
+		
 		var el = e.target || e.srcElement;
-		while (el && el.className.indexOf("cell") == -1) {
+		while (el && el.className.indexOf("cell") === -1) {
 			el = el.parentElement;
 		}
 		if (el) {
 			var row = indexOf(el.parentElement);
 			var col = indexOf(el);
 			console.log("cell(", row, ",", col, ") has been clicked");
-			clickHandler(row, col);
+			var rightClick = (e.which && e.which === 3) || (e.button && e.button === 2); 
+			clickHandler(row, col, rightClick);
 		}
+		
+		return false;
+	});
+	addEventListener(document, "contextmenu", function(e){
+		if (e.preventDefault) {
+			e.preventDefault();	
+		}
+		return false;
 	});
 
 	function indexOf(node) {
@@ -187,9 +197,29 @@ var view = (function() {
 	}
 
 	function reveal(i, j) {
+		addClass(i, j, "revealed");
+	}
+	
+	function toggleFlag(i, j) {
+		toggleClass(i, j, "flagged");
+	}
+	
+	function addClass(i,j,clazz) {
+		applyClass(i,j,function(el){
+			el.classList.add(clazz);
+		});
+	}
+	
+	function toggleClass(i,j,clazz) {
+		applyClass(i,j,function(el){
+			el.classList.toggle(clazz);
+		});
+	}
+	
+	function applyClass(i,j,f) {
 		var rowElement = gameElement.children[i];
 		if (rowElement && rowElement.children[j]) {
-			rowElement.children[j].className += " revealed";
+			f(rowElement.children[j]);
 		} else {
 			console.log("cell (", i, ",", j, ") not found");
 		}
@@ -198,7 +228,8 @@ var view = (function() {
 	return {
 		reset : reset,
 		registerClickHandler : registerClickHandler,
-		reveal : reveal
+		reveal : reveal,
+		toggleFlag : toggleFlag
 	};
 })();
 
@@ -213,23 +244,27 @@ var controller = (function(model, view) {
 		view.reset(model.cells(), rows, cols);
 	}
 
-	function onclick(row, col) {
+	function onclick(row, col, right) {
 		var cell = m_model.getCell(row, col);
 		if (cell) {
-			if (cell.m_trapped) {
-				alert("Boom ! You loose!");
+			if (right && !cell.m_revealed) {
+				m_view.toggleFlag(cell.x, cell.y);	
 			} else {
-				var cellsToReveal = m_model.reveal(cell);
-				var length = cellsToReveal.length;
-				for ( var i = 0; i < length; i++) {
-					var currentCell = cellsToReveal[i];
-					m_view.reveal(currentCell.x, currentCell.y);
+				if (cell.m_trapped) {
+					alert("Boom ! You loose!");
+				} else {
+					var cellsToReveal = m_model.reveal(cell);
+					var length = cellsToReveal.length;
+					for ( var i = 0; i < length; i++) {
+						var currentCell = cellsToReveal[i];
+						m_view.reveal(currentCell.x, currentCell.y);
+					}
+					m_cellRevealed += length;
+					if (m_model.getNbCellsForVictory() == m_cellRevealed) {
+						alert("You win!");
+					}
 				}
-				m_cellRevealed += length;
-				if (m_model.getNbCellsForVictory() == m_cellRevealed) {
-					alert("You win!");
-				}
-			}	
+			}
 		} else {
 			console.log("Unable to find cell");
 		}
