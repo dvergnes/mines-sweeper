@@ -17,7 +17,7 @@
  */
 
 var model = (function() {
-	var m_bomb, m_rows, m_columns;
+	var m_bomb = 0, m_rows = 0, m_columns = 0;
 	var m_cells = [];
 
 	function isInRange(i, j) {
