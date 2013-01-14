@@ -203,6 +203,7 @@ var view = (function() {
 		flipElement.className = "flip";
 		cellElement.appendChild(flipElement);
 		cellElement.className = "cell";
+		cellElement.setAttribute("role","button");
 		if (cell) {
 			if (cell.m_bombs != 0) {
 				frontElement.innerHTML = cell.m_bombs;
