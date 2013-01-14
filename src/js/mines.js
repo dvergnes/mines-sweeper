@@ -132,8 +132,14 @@ var view = (function() {
 	});
 
 	function indexOf(node) {
-		var nodeList = Array.prototype.slice.call(node.parentElement.children);
-		return nodeList.indexOf(node);
+		var child = node.parentElement.children;
+		var length = child.length;
+		for (var i=0;i<length;i++) {
+			if (child[i] == node) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	function registerClickHandler(handler) {
