@@ -1,3 +1,21 @@
+/*
+ * mines.js: Mines sweeper web implementation
+ * 
+ * Copyright (C) 2013  Denis Vergnes
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *     
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 var model = (function() {
 	var m_bomb, m_rows, m_columns;
 	var m_cells = [];
@@ -112,14 +130,14 @@ var view = (function() {
 		if (element.addEventListener) {
 			element.addEventListener(event, f, false);
 		} else if (element.attachEvent) {
-			element.attachEvent('on'+event, f);
+			element.attachEvent('on' + event, f);
 		}
 	}
 	addEventListener(gameElement, "mouseup", function(e) {
 		if (!e) {
 			e = window.event;
 		}
-		
+
 		var el = e.target || e.srcElement;
 		while (el && el.className.indexOf("cell") === -1) {
 			el = el.parentElement;
@@ -128,15 +146,16 @@ var view = (function() {
 			var row = indexOf(el.parentElement);
 			var col = indexOf(el);
 			console.log("cell(", row, ",", col, ") has been clicked");
-			var rightClick = (e.which && e.which === 3) || (e.button && e.button === 2); 
+			var rightClick = (e.which && e.which === 3)
+					|| (e.button && e.button === 2);
 			clickHandler(row, col, rightClick);
 		}
-		
+
 		return false;
 	});
-	addEventListener(document, "contextmenu", function(e){
+	addEventListener(document, "contextmenu", function(e) {
 		if (e.preventDefault) {
-			e.preventDefault();	
+			e.preventDefault();
 		}
 		return false;
 	});
@@ -144,7 +163,7 @@ var view = (function() {
 	function indexOf(node) {
 		var child = node.parentElement.children;
 		var length = child.length;
-		for (var i=0;i<length;i++) {
+		for ( var i = 0; i < length; i++) {
 			if (child[i] == node) {
 				return i;
 			}
@@ -186,7 +205,7 @@ var view = (function() {
 		cellElement.className = "cell";
 		if (cell) {
 			if (cell.m_bombs != 0) {
-				frontElement.innerHTML = cell.m_bombs;	
+				frontElement.innerHTML = cell.m_bombs;
 			}
 			frontElement.className = "front";
 			if (cell.m_trapped) {
@@ -199,24 +218,24 @@ var view = (function() {
 	function reveal(i, j) {
 		addClass(i, j, "revealed");
 	}
-	
+
 	function toggleFlag(i, j) {
 		toggleClass(i, j, "flagged");
 	}
-	
-	function addClass(i,j,clazz) {
-		applyClass(i,j,function(el){
+
+	function addClass(i, j, clazz) {
+		applyClass(i, j, function(el) {
 			el.classList.add(clazz);
 		});
 	}
-	
-	function toggleClass(i,j,clazz) {
-		applyClass(i,j,function(el){
+
+	function toggleClass(i, j, clazz) {
+		applyClass(i, j, function(el) {
 			el.classList.toggle(clazz);
 		});
 	}
-	
-	function applyClass(i,j,f) {
+
+	function applyClass(i, j, f) {
 		var rowElement = gameElement.children[i];
 		if (rowElement && rowElement.children[j]) {
 			f(rowElement.children[j]);
@@ -248,7 +267,7 @@ var controller = (function(model, view) {
 		var cell = m_model.getCell(row, col);
 		if (cell) {
 			if (right && !cell.m_revealed) {
-				m_view.toggleFlag(cell.x, cell.y);	
+				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
 					alert("Boom ! You loose!");
@@ -268,7 +287,7 @@ var controller = (function(model, view) {
 		} else {
 			console.log("Unable to find cell");
 		}
-		
+
 	}
 	m_view.registerClickHandler(onclick);
 
