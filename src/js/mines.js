@@ -175,7 +175,8 @@ var view = (function() {
 		cellElement.appendChild(flipElement);
 		cellElement.className = "cell";
 		if (cell) {
-			frontElement.innerHTML = cell.m_bombs;
+			frontElement.innerHTML = cell.m_bombs;	
+			frontElement.className = "front";
 			if (cell.m_trapped) {
 				frontElement.className += " trapped";
 			}
