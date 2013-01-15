@@ -271,7 +271,9 @@ var controller = (function(model, view) {
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
-					alert("Boom ! You loose!");
+					if (confirm("Boom ! You loose! Do you want to start a new game?")) {
+						start();
+					}
 				} else {
 					var cellsToReveal = m_model.reveal(cell);
 					var length = cellsToReveal.length;
@@ -281,7 +283,9 @@ var controller = (function(model, view) {
 					}
 					m_cellRevealed += length;
 					if (m_model.getNbCellsForVictory() == m_cellRevealed) {
-						alert("You win!");
+						if (confirm("You win! Do you want to start a new game?")) {
+							start();
+						}
 					}
 				}
 			}
