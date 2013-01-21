@@ -262,6 +262,7 @@ var controller = (function(model, view) {
 		var rows = 8, cols = 8, bombs = 10;
 		model.reset(rows, cols, bombs);
 		view.reset(model.cells(), rows, cols);
+		m_cellRevealed = 0;
 	}
 
 	function onclick(row, col, right) {
