@@ -123,6 +123,8 @@ var model = (function() {
 })();
 
 var view = (function() {
+	var timer;
+	var longClick = false;
 	var clickHandler;
 	var gameElement = document.getElementById("game");
 
@@ -134,20 +136,15 @@ var view = (function() {
 		}
 	}
 	addEventListener(gameElement, "mouseup", function(e) {
-		if (!e) {
-			e = window.event;
-		}
-
-		var el = e.target || e.srcElement;
-		while (el && el.className.indexOf("cell") === -1) {
-			el = el.parentElement;
-		}
-		if (el) {
+		console.log("mouseup");
+		clearTimeout(timer);
+		var el = findTarget(e);
+		if (!longClick && el) {
 			var row = indexOf(el.parentElement);
 			var col = indexOf(el);
 			console.log("cell(", row, ",", col, ") has been clicked");
 			var rightClick = (e.which && e.which === 3)
-					|| (e.button && e.button === 2);
+					|| (e.button && e.button === 2) || longClick;
 			clickHandler(row, col, rightClick);
 		}
 
@@ -159,6 +156,34 @@ var view = (function() {
 		}
 		return false;
 	});
+	addEventListener(gameElement, "touchstart", function(e){
+		console.log("touchstart");
+		longClick = false;
+		timer = setTimeout(function(){
+			longClick = true;
+			var el = findTarget(e);
+			if (el) {
+				var row = indexOf(el.parentElement);
+				var col = indexOf(el);
+				console.log("cell(", row, ",", col, ") has been long clicked");
+				clickHandler(row, col, longClick);
+			}
+		},500);
+	});
+	addEventListener(gameElement, "touchmove", function(e){
+		clearTimeout(timer);
+	});
+
+	function findTarget(e) {
+		if (!e) {
+			e = window.event;
+		}
+		var el = e.target || e.srcElement;
+		while (el && el.className.indexOf("cell") === -1) {
+			el = el.parentElement;
+		}
+		return el;
+	}
 
 	function indexOf(node) {
 		var child = node.parentElement.children;
@@ -203,7 +228,7 @@ var view = (function() {
 		flipElement.className = "flip";
 		cellElement.appendChild(flipElement);
 		cellElement.className = "cell";
-		cellElement.setAttribute("role","button");
+		cellElement.setAttribute("role", "button");
 		if (cell) {
 			if (cell.m_bombs != 0 && !cell.m_trapped) {
 				frontElement.innerHTML = cell.m_bombs;
@@ -303,8 +328,9 @@ var controller = (function(model, view) {
 		onclick : onclick
 	};
 })(model, view);
-if (typeof(console) === 'undefined') {
+if (typeof (console) === 'undefined') {
 	console = {};
-	console.log = function(){};
+	console.log = function() {
+	};
 }
 controller.start();

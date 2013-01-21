@@ -24,6 +24,12 @@ body {
 
 .cell,.flip div {
 	width: 100px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .cell {
@@ -58,7 +64,7 @@ body {
 	-webkit-backface-visibility: hidden;
 	/* Old browsers */
 	background: #7abcff;
-	/* FF3.6+ */ 
+	/* FF3.6+ */
 	background: -moz-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%);
 	/* Chrome,Safari4+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7abcff),
@@ -81,22 +87,27 @@ body {
 	z-index: -1;
 }
 
-.flagged .flip div {
-	/* Old browsers */
-	background: #fcf18f; 
+.flagged .flip div { /* Old browsers */
+	background: #fcf18f;
 	/* FF3.6+ */
-	background: url("../img/redFlag.svg") no-repeat, -moz-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+	background: url("../img/redFlag.svg") no-repeat,
+		-moz-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* Chrome,Safari4+ */
-	background: url("../img/redFlag.svg") no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7abcff),
+	background: url("../img/redFlag.svg") no-repeat,
+		-webkit-gradient(linear, left top, left bottom, color-stop(0%, #7abcff),
 		color-stop(44%, #60abf8), color-stop(100%, #4096ee) );
 	/* Chrome10+,Safari5.1+ */
-	background: url("../img/redFlag.svg") no-repeat, -webkit-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%);
+	background: url("../img/redFlag.svg") no-repeat,
+		-webkit-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%);
 	/* Opera 11.10+ */
-	background: url("../img/redFlag.svg") no-repeat, -o-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%);
+	background: url("../img/redFlag.svg") no-repeat,
+		-o-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%);
 	/* IE10+ */
-	background: url("../img/redFlag.svg") no-repeat, -ms-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%);
+	background: url("../img/redFlag.svg") no-repeat,
+		-ms-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%);
 	/* W3C */
-	background: url("../img/redFlag.svg") no-repeat, linear-gradient(to bottom, #7ABCFF 0%, #60ABF8 44%, #4096EE 100%);
+	background: url("../img/redFlag.svg") no-repeat,
+		linear-gradient(to bottom, #7ABCFF 0%, #60ABF8 44%, #4096EE 100%);
 	background-size: contain;
 }
 
@@ -106,9 +117,8 @@ body {
 	transform: rotateY(180deg);
 }
 
-.revealed .flip .front {
-	/* Old browsers */
-	background: #f0f9ff; 
+.revealed .flip .front { /* Old browsers */
+	background: #f0f9ff;
 	/* FF3.6+ */
 	background: -moz-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* Chrome,Safari4+ */
@@ -126,21 +136,26 @@ body {
 	z-index: 3;
 }
 
-.revealed .flip .trapped {
-	/* Old browsers */
-	background: #ff0000; 
+.revealed .flip .trapped { /* Old browsers */
+	background: #ff0000;
 	/* FF3.6+ */
-	background: url("../img/bomb.svg") no-repeat center 0, -moz-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+	background: url("../img/bomb.svg") no-repeat center 0,
+		-moz-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* Chrome,Safari4+ */
-	background: url("../img/bomb.svg") no-repeat center 0, -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f0f9ff),
+	background: url("../img/bomb.svg") no-repeat center 0,
+		-webkit-gradient(linear, left top, left bottom, color-stop(0%, #f0f9ff),
 		color-stop(47%, #cbebff), color-stop(100%, #a1dbff) );
 	/* Chrome10+,Safari5.1+ */
-	background: url("../img/bomb.svg") no-repeat center 0, -webkit-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+	background: url("../img/bomb.svg") no-repeat center 0,
+		-webkit-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* Opera 11.10+ */
-	background: url("../img/bomb.svg") no-repeat center 0, -o-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+	background: url("../img/bomb.svg") no-repeat center 0,
+		-o-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* IE10+ */
-	background: url("../img/bomb.svg") no-repeat center 0, -ms-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+	background: url("../img/bomb.svg") no-repeat center 0,
+		-ms-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* W3C */
-	background: url("../img/bomb.svg") no-repeat center 0, linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+	background: url("../img/bomb.svg") no-repeat center 0,
+		linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	background-size: contain;
 }
