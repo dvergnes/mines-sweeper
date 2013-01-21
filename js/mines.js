@@ -205,7 +205,7 @@ var view = (function() {
 		cellElement.className = "cell";
 		cellElement.setAttribute("role","button");
 		if (cell) {
-			if (cell.m_bombs != 0) {
+			if (cell.m_bombs != 0 && !cell.m_trapped) {
 				frontElement.innerHTML = cell.m_bombs;
 			}
 			frontElement.className = "front";
@@ -271,6 +271,7 @@ var controller = (function(model, view) {
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
+					m_view.reveal(cell.x, cell.y);
 					if (confirm("Boom ! You loose! Do you want to start a new game?")) {
 						start();
 					}
@@ -301,4 +302,5 @@ var controller = (function(model, view) {
 		onclick : onclick
 	};
 })(model, view);
+
 controller.start();
