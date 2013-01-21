@@ -302,5 +302,8 @@ var controller = (function(model, view) {
 		onclick : onclick
 	};
 })(model, view);
-
+if (typeof(console) === 'undefined') {
+	console = {};
+	console.log = function(){};
+}
 controller.start();
