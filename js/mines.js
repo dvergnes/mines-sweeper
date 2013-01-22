@@ -123,10 +123,12 @@ var model = (function() {
 })();
 
 var view = (function() {
-	var timer;
+	var timer = null;
 	var longClick = false;
 	var clickHandler;
 	var gameElement = document.getElementById("game");
+	/* init with default value */
+	var cellSize = 100;
 
 	function addEventListener(element, event, f) {
 		if (element.addEventListener) {
@@ -199,9 +201,29 @@ var view = (function() {
 	function registerClickHandler(handler) {
 		clickHandler = handler;
 	}
+	
+	function computeRowWidth() {
+		var body = window.document.body;
+		var winWidth=0,
+			winHeight=0;
+		if (window.innerWidth) {
+			winWidth = window.innerWidth;
+			winHeight = window.innerHeight;
+		} else if (body.parentElement.clientWidth) {
+			winWidth = body.parentElement.clientWidth;
+			winHeight = body.parentElement.clientHeight;
+		}
+		return  Math.min(winWidth, winHeight-document.getElementById("commands").offsetHeight);
+	}
+	
+	function computeCellSize(rows,cols,rowWidth) {
+		var nbCellsByRow = Math.max(rows,cols);
+		return Math.floor((rowWidth/nbCellsByRow) - 2);
+	}
 
 	function reset(cells, rows, cols) {
 		gameElement.innerHTML = '';
+		cellSize = computeCellSize(rows, cols, computeRowWidth());
 		for ( var i = 0; i < rows; i++) {
 			var row = cells.slice(i * rows, i * rows + cols);
 			gameElement.appendChild(createRow(row));
@@ -211,6 +233,7 @@ var view = (function() {
 	function createRow(cells) {
 		var row = document.createElement("div");
 		row.className = "row";
+		row.style.height = cellSize+"px";
 		var length = cells.length;
 		for ( var i = 0; i < length; i++) {
 			row.appendChild(createCell(cells[i]));
@@ -223,6 +246,13 @@ var view = (function() {
 		var flipElement = document.createElement("div");
 		var frontElement = document.createElement("div");
 		var backElement = document.createElement("div");
+		cellElement.style.width=cellSize+"px";
+		cellElement.style.fontSize=Math.floor(cellSize/2)+"px";
+		cellElement.style.lineHeight=cellSize+"px";
+		backElement.style.height=cellSize+"px";
+		backElement.style.width=cellSize+"px";
+		frontElement.style.height=cellSize+"px";
+		frontElement.style.width=cellSize+"px";
 		flipElement.appendChild(backElement);
 		flipElement.appendChild(frontElement);
 		flipElement.className = "flip";

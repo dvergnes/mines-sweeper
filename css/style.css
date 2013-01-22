@@ -2,28 +2,36 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.commands,.game {
+#commands,.game {
 	text-align: center;
 }
 
-.commands {
-	padding: 1em;
+#commands {
+	/* Webkit browsers */
+	padding: 3vm;
+	/* W3C */
+	padding: 3vmin;
 }
 
 .row,.cell,.flip div {
-	height: 100px;
+	/* Webkit browsers */
+	height: 11vm;
+	/* W3C */
+	height: 11vmin;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box; /* Firefox, other Gecko */
 	box-sizing: border-box; /* Opera/IE 8+ */
 }
 
 .row {
-	margin: 0;
-	min-width: 816px;
+	margin: 0 auto;
 }
 
 .cell,.flip div {
-	width: 100px;
+	/* Webkit browsers */
+	width: 11vm;
+	/* W3C */
+	width: 11vmin;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -34,17 +42,18 @@ body {
 
 .cell {
 	display: inline-block;
-	font-size: 3em;
-	line-height: 100px;
 	text-align: center;
 	perspective: 500px;
 	cursor: pointer;
+	/* Webkit browsers */
+	font-size: 5vm;
+	line-height: 11vm;
+	/* W3C */
+	font-size: 5vmin;
+	line-height: 11vmin;
 }
 
 .flip {
-	transform: rotateY(0deg);
-	transform-style: preserve-3d;
-	transition: all 1s ease 0s;
 	-moz-transform-style: preserve-3d;
 	-moz-transform: rotateY(0deg);
 	-moz-transition: all 1s ease 0s;
