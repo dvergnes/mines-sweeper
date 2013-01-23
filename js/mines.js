@@ -139,7 +139,6 @@ var view = (function() {
 	}
 	addEventListener(gameElement, "mouseup", function(e) {
 		console.log("mouseup");
-		clearTimeout(timer);
 		var el = findTarget(e);
 		if (!longClick && el) {
 			var row = indexOf(el.parentElement);
@@ -160,7 +159,6 @@ var view = (function() {
 	});
 	addEventListener(gameElement, "touchstart", function(e){
 		console.log("touchstart");
-		longClick = false;
 		timer = setTimeout(function(){
 			longClick = true;
 			var el = findTarget(e);
@@ -168,11 +166,15 @@ var view = (function() {
 				var row = indexOf(el.parentElement);
 				var col = indexOf(el);
 				console.log("cell(", row, ",", col, ") has been long clicked");
-				clickHandler(row, col, longClick);
+				clickHandler(row, col, true);
 			}
 		},500);
 	});
 	addEventListener(gameElement, "touchmove", function(e){
+		clearTimeout(timer);
+	});
+	addEventListener(gameElement, "touchend", function(e){
+		longClick = false;
 		clearTimeout(timer);
 	});
 
