@@ -123,12 +123,13 @@ var model = (function() {
 })();
 
 var view = (function() {
-	var timer = null;
+	var longPressTimeout = null, resizeTimeout = null;
 	var longClick = false;
 	var clickHandler;
 	var gameElement = document.getElementById("game");
-	/* init with default value */
+	var nbCellsByRow = 8;
 	var cellSize = 100;
+	var MIN_CELL_SIZE = 20;
 
 	function addEventListener(element, event, f) {
 		if (element.addEventListener) {
@@ -157,9 +158,9 @@ var view = (function() {
 		}
 		return false;
 	});
-	addEventListener(gameElement, "touchstart", function(e){
+	addEventListener(gameElement, "touchstart", function(e) {
 		console.log("touchstart");
-		timer = setTimeout(function(){
+		longPressTimeout = setTimeout(function() {
 			longClick = true;
 			var el = findTarget(e);
 			if (el) {
@@ -168,15 +169,48 @@ var view = (function() {
 				console.log("cell(", row, ",", col, ") has been long clicked");
 				clickHandler(row, col, true);
 			}
-		},500);
+		}, 500);
 	});
-	addEventListener(gameElement, "touchmove", function(e){
-		clearTimeout(timer);
+	addEventListener(gameElement, "touchmove", function(e) {
+		clearTimeout(longPressTimeout);
 	});
-	addEventListener(gameElement, "touchend", function(e){
+	addEventListener(gameElement, "touchend", function(e) {
 		longClick = false;
-		clearTimeout(timer);
+		clearTimeout(longPressTimeout);
 	});
+
+	addEventListener(window, "resize", function() {
+		/* Code from MDN https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/resize */
+		// ignore resize events as long as an actualResizeHandler execution is
+		// in the queue
+		if (!resizeTimeout) {
+			resizeTimeout = setTimeout(function() {
+				resizeTimeout = null;
+				actualResizeHandler();
+				// The actualResizeHandler will execute at a rate of 15fps
+			}, 66);
+		}
+	});
+
+	function actualResizeHandler() {
+		var newSize = computeCellSize();
+		if (cellSize !== newSize && newSize > MIN_CELL_SIZE) {
+			cellSize = newSize;
+			console.log("window resized, new cell size:",cellSize);
+			var rowElements = document.querySelectorAll(".row");
+			for ( var i = 0; i < rowElements.length; i++) {
+				updateRowElementStyle(rowElements[i]);
+			}
+			var cellElements = document.querySelectorAll(".cell");
+			for ( var i = 0; i < cellElements.length; i++) {
+				updateCellElementStyle(cellElements[i]);
+			}
+			var tileElements = document.querySelectorAll(".cell .flip div");
+			for ( var i = 0; i < tileElements.length; i++) {
+				updateTileElementStyle(tileElements[i]);
+			}
+		}
+	}
 
 	function findTarget(e) {
 		if (!e) {
@@ -203,11 +237,10 @@ var view = (function() {
 	function registerClickHandler(handler) {
 		clickHandler = handler;
 	}
-	
+
 	function computeRowWidth() {
 		var body = window.document.body;
-		var winWidth=0,
-			winHeight=0;
+		var winWidth = 0, winHeight = 0;
 		if (window.innerWidth) {
 			winWidth = window.innerWidth;
 			winHeight = window.innerHeight;
@@ -215,17 +248,18 @@ var view = (function() {
 			winWidth = body.parentElement.clientWidth;
 			winHeight = body.parentElement.clientHeight;
 		}
-		return  Math.min(winWidth, winHeight-document.getElementById("commands").offsetHeight);
+		return Math.min(winWidth, winHeight
+				- document.getElementById("commands").offsetHeight);
 	}
-	
-	function computeCellSize(rows,cols,rowWidth) {
-		var nbCellsByRow = Math.max(rows,cols);
-		return Math.floor((rowWidth/nbCellsByRow) - 2);
+
+	function computeCellSize() {
+		return Math.floor((computeRowWidth() / nbCellsByRow) - 2);
 	}
 
 	function reset(cells, rows, cols) {
 		gameElement.innerHTML = '';
-		cellSize = computeCellSize(rows, cols, computeRowWidth());
+		nbCellsByRow = Math.max(rows, cols);
+		cellSize = computeCellSize();
 		for ( var i = 0; i < rows; i++) {
 			var row = cells.slice(i * rows, i * rows + cols);
 			gameElement.appendChild(createRow(row));
@@ -235,12 +269,27 @@ var view = (function() {
 	function createRow(cells) {
 		var row = document.createElement("div");
 		row.className = "row";
-		row.style.height = cellSize+"px";
+		updateRowElementStyle(row);
 		var length = cells.length;
 		for ( var i = 0; i < length; i++) {
 			row.appendChild(createCell(cells[i]));
 		}
 		return row;
+	}
+	
+	function updateRowElementStyle(rowElement) {
+		rowElement.style.height = cellSize + "px";
+	}
+	
+	function updateCellElementStyle(cellElement) {
+		cellElement.style.width = cellSize + "px";
+		cellElement.style.fontSize = Math.floor(cellSize / 2) + "px";
+		cellElement.style.lineHeight = cellSize + "px";
+	}
+	
+	function updateTileElementStyle(el) {
+		el.style.height = cellSize + "px";
+		el.style.width = cellSize + "px";
 	}
 
 	function createCell(cell) {
@@ -248,13 +297,9 @@ var view = (function() {
 		var flipElement = document.createElement("div");
 		var frontElement = document.createElement("div");
 		var backElement = document.createElement("div");
-		cellElement.style.width=cellSize+"px";
-		cellElement.style.fontSize=Math.floor(cellSize/2)+"px";
-		cellElement.style.lineHeight=cellSize+"px";
-		backElement.style.height=cellSize+"px";
-		backElement.style.width=cellSize+"px";
-		frontElement.style.height=cellSize+"px";
-		frontElement.style.width=cellSize+"px";
+		updateCellElementStyle(cellElement);
+		updateTileElementStyle(frontElement);
+		updateTileElementStyle(backElement);
 		flipElement.appendChild(backElement);
 		flipElement.appendChild(frontElement);
 		flipElement.className = "flip";
@@ -322,10 +367,10 @@ var controller = (function(model, view) {
 		m_cellRevealed = 0;
 	}
 
-	function onclick(row, col, right) {
+	function onclick(row, col, rightOrLongClick) {
 		var cell = m_model.getCell(row, col);
 		if (cell) {
-			if (right && !cell.m_revealed) {
+			if (rightOrLongClick && !cell.m_revealed) {
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
