@@ -7,20 +7,23 @@ body {
 }
 
 #commands {
-	/* Webkit browsers */
+	/* Webkit browsers, IE9+ */
 	padding: 3vm;
 	/* W3C */
 	padding: 3vmin;
 }
 
 .row,.cell,.flip div {
-	/* Webkit browsers */
+	/* Webkit browsers, IE9+ */
 	height: 11vm;
 	/* W3C */
 	height: 11vmin;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box; /* Firefox, other Gecko */
-	box-sizing: border-box; /* Opera/IE 8+ */
+	/* Safari/Chrome, other WebKit */
+	-webkit-box-sizing: border-box;
+	/* Firefox, other Gecko */ 
+	-moz-box-sizing: border-box;
+	/* Opera/IE 8+ */ 
+	box-sizing: border-box; 
 }
 
 .row {
