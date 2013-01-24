@@ -17,11 +17,13 @@
 </style>
 <![endif]-->
 <script type="text/javascript" src="js/external/classlist.js"></script>
+<script type="text/javascript" src="js/external/lib.install.js"></script>
 </head>
 <body>
 <div class="ribbon"><a href="https://github.com/vergnes/mines-sweeper" alt="Fork me on GitHub">Fork me on GitHub</a></div>
 <div id="commands">
-	<button onclick="controller.start();">New game</button>
+	<button id="newGame">New game</button>
+	<button id="install" class="hidden">Install</button>
 </div>
 <div id="game" class="game"></div>
 <script type="text/javascript" src="js/mines.js"></script>

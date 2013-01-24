@@ -1,0 +1,24 @@
+{
+  "name": "Mines Sweeper",
+  "description": "Mines Sweeper",
+  "launch_path": "/mines-sweeper/index.html",
+  "version": "1.0",
+  "installs_allowed_from": ["*"],
+  "developer": {
+    "name": "Denis Vergnes",
+    "url": "https:/hub.com/vergnes"
+  },
+  "permissions": [
+  ],
+  "default_locale": "en-US",
+  "icons": {
+  	"256": "/mines-sweeper/img/bomb-256.png",
+    "128": "/mines-sweeper/img/bomb-128.png",
+    "64": "/mines-sweeper/img/bomb-64.png",
+    "60": "/mines-sweeper/img/bomb-60.png",
+    "48": "/mines-sweeper/img/bomb-48.png",
+    "32": "/mines-sweeper/img/bomb-32.png",
+    "30": "/mines-sweeper/img/bomb-30.png",
+    "16": "/mines-sweeper/img/bomb-16.png"
+  }
+}

@@ -4,6 +4,10 @@ body {
 	padding: 0;
 }
 
+.hidden {
+	display: none;
+}
+
 .ribbon {
 	position: absolute;
 	right: 0;

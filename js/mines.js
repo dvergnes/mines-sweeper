@@ -16,6 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* IE fix */
+if (typeof (console) === 'undefined') {
+	console = {};
+	console.log = function() {
+	};
+	console.group = console.groupEnd = console.log;
+}
+
+function addEventListener(element, event, f) {
+	if (element.addEventListener) {
+		element.addEventListener(event, f, false);
+	} else if (element.attachEvent) {
+		element.attachEvent('on' + event, f);
+	}
+}
+
 var model = (function() {
 	var m_bomb = 0, m_rows = 0, m_columns = 0;
 	var m_cells = [];
@@ -59,18 +75,18 @@ var model = (function() {
 		while (remainingBombs > 0) {
 			var row = Math.round(Math.random() * (m_rows - 1));
 			var col = Math.round(Math.random() * (m_columns - 1));
-			console.log("select cell (", row, ",", col, ")");
+//			console.log("select cell (", row, ",", col, ")");
 			var selectedCell = getCell(row, col) || {};
 			if (!selectedCell.m_trapped) {
 				selectedCell.m_trapped = true;
-				console.log("install bomb on cell (", row, ",", col, ")");
+//				console.log("install bomb on cell (", row, ",", col, ")");
 				visitNeighbours(selectedCell, updateBomb);
 				remainingBombs--;
 			} else {
-				console.log("cell (", row, ",", col, ") already bombed");
+//				console.log("cell (", row, ",", col, ") already bombed");
 			}
 		}
-		console.log("all bombs have been planted");
+//		console.log("all bombs have been planted");
 	}
 
 	function visitNeighbours(cell, f) {
@@ -125,19 +141,21 @@ var model = (function() {
 var view = (function() {
 	var longPressTimeout = null, resizeTimeout = null;
 	var longClick = false;
-	var clickHandler;
-	var gameElement = document.getElementById("game");
+	var clickHandler, newGameHandler, installHandler;
+	var gameElement = document.getElementById("game"),
+		installElement = document.getElementById("install");
 	var nbCellsByRow = 8;
 	var cellSize = 100;
 	var MIN_CELL_SIZE = 20;
-
-	function addEventListener(element, event, f) {
-		if (element.addEventListener) {
-			element.addEventListener(event, f, false);
-		} else if (element.attachEvent) {
-			element.attachEvent('on' + event, f);
-		}
-	}
+	
+	addEventListener(document.getElementById("newGame"), "click", function(){
+		newGameHandler();
+	});
+	
+	addEventListener(installElement, "click", function(){
+		installHandler();
+	});
+	
 	addEventListener(gameElement, "mouseup", function(e) {
 		console.log("mouseup");
 		var el = findTarget(e);
@@ -236,6 +254,14 @@ var view = (function() {
 
 	function registerClickHandler(handler) {
 		clickHandler = handler;
+	}
+	
+	function registerNewGameHandler(handler) {
+		newGameHandler = handler;
+	}
+	
+	function registerInstallHandler(handler) {
+		installHandler = handler;
 	}
 
 	function computeRowWidth() {
@@ -346,12 +372,23 @@ var view = (function() {
 			console.log("cell (", i, ",", j, ") not found");
 		}
 	}
+	
+	function showInstall() {
+		installElement.classList.remove("hidden");
+	}
+	function hideInstall() {
+		installElement.classList.add("hidden");
+	}
 
 	return {
 		reset : reset,
 		registerClickHandler : registerClickHandler,
+		registerNewGameHandler : registerNewGameHandler,
+		registerInstallHandler : registerInstallHandler,
 		reveal : reveal,
-		toggleFlag : toggleFlag
+		toggleFlag : toggleFlag,
+		showInstall : showInstall,
+		hideInstall : hideInstall,
 	};
 })();
 
@@ -359,15 +396,34 @@ var controller = (function(model, view) {
 	var m_model = model;
 	var m_view = view;
 	var m_cellRevealed = 0;
-
+	
 	function start() {
+		console.log(window.install.state);
+		if (window.install.state !== 'installed') {
+			console.log("application is not installed");
+			m_view.showInstall();
+		}
+		newGame();
+	}
+	
+	function install() {
+		window.install();
+	}
+	window.install.addEventListener('change', function(e) {
+		console.log(e.detail);
+		if (e.detail === 'installed') {
+			m_view.hideInstall();
+		}
+	});
+
+	function newGame() {
 		var rows = 8, cols = 8, bombs = 10;
 		model.reset(rows, cols, bombs);
 		view.reset(model.cells(), rows, cols);
 		m_cellRevealed = 0;
 	}
 
-	function onclick(row, col, rightOrLongClick) {
+	function onCellClick(row, col, rightOrLongClick) {
 		var cell = m_model.getCell(row, col);
 		if (cell) {
 			if (rightOrLongClick && !cell.m_revealed) {
@@ -376,7 +432,7 @@ var controller = (function(model, view) {
 				if (cell.m_trapped) {
 					m_view.reveal(cell.x, cell.y);
 					if (confirm("Boom ! You loose! Do you want to start a new game?")) {
-						start();
+						newGame();
 					}
 				} else {
 					var cellsToReveal = m_model.reveal(cell);
@@ -388,7 +444,7 @@ var controller = (function(model, view) {
 					m_cellRevealed += length;
 					if (m_model.getNbCellsForVictory() == m_cellRevealed) {
 						if (confirm("You win! Do you want to start a new game?")) {
-							start();
+							newGame();
 						}
 					}
 				}
@@ -398,16 +454,13 @@ var controller = (function(model, view) {
 		}
 
 	}
-	m_view.registerClickHandler(onclick);
+	m_view.registerClickHandler(onCellClick);
+	m_view.registerNewGameHandler(newGame);
+	m_view.registerInstallHandler(install);
 
 	return {
-		start : start,
-		onclick : onclick
+		start : start
 	};
 })(model, view);
-if (typeof (console) === 'undefined') {
-	console = {};
-	console.log = function() {
-	};
-}
+
 controller.start();
