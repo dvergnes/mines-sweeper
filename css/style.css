@@ -1,37 +1,90 @@
 body {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+.ribbon {
+	position: absolute;
+	right: 0;
+	top: 0;
+	overflow: hidden;
+	height: 11em;
+	width: 11em;
+}
+
+.ribbon a {
+	background-color: #f60;
+	color: white;
+	text-decoration: none;
+	border: 1px dotted;
+	padding: 0.2em 3em;
+	text-align: center;
+	position: absolute;
+	display: block;
+	width: 9.5em;
+	height: 1.5em;
+	top: 3em;
+	right: -4em;
+	text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+	/* FF3.6+ */
+	background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15) );
+	/* Chrome,Safari4+ */
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.00)
+		), to(rgba(0, 0, 0, 0.15) ) );
+	/* Chrome10+,Safari5.1+ */
+	background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.00),	rgba(0, 0, 0, 0.15) );
+	/* Opera 11.10+ */
+	background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15) );
+	/* IE10+ */
+	background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0.00),	rgba(0, 0, 0, 0.15) );
+	/* W3C */
+	background-image: linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15) );
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-moz-transform : rotate( 45deg);
+	-o-transform : rotate( 45deg);
+	transform: rotate(45deg);
+}
+
+@media only screen and (max-width: 900px) , only screen and
+	(max-device-width: 900px) {
+	.ribbon {
+		display: none;
+	}
 }
 
 #commands,.game {
 	text-align: center;
 }
 
-#commands {
-	/* Webkit browsers, IE9+ */
+#commands { /* Webkit browsers, IE9+ */
 	padding: 3vm;
 	/* W3C */
 	padding: 3vmin;
 }
 
-.row,.cell,.flip div {
-	/* Webkit browsers, IE9+ */
+.row,.cell,.flip div { /* Webkit browsers, IE9+ */
 	height: 11vm;
 	/* W3C */
 	height: 11vmin;
 	/* Safari/Chrome, other WebKit */
 	-webkit-box-sizing: border-box;
-	/* Firefox, other Gecko */ 
+	/* Firefox, other Gecko */
 	-moz-box-sizing: border-box;
-	/* Opera/IE 8+ */ 
-	box-sizing: border-box; 
+	/* Opera/IE 8+ */
+	box-sizing: border-box;
 }
 
 .row {
 	margin: 0 auto;
 }
 
-.cell,.flip div {
-	/* Webkit browsers */
+.cell,.flip div { /* Webkit browsers */
 	width: 11vm;
 	/* W3C */
 	width: 11vmin;

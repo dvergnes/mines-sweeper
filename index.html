@@ -3,9 +3,20 @@
 <head>
 <meta name="viewport" content="width=device-width">
 <link type="text/css" href="css/style.css" rel="stylesheet">
+<!--[if lt IE 9]>
+<style>
+.ribbon a {
+	/* IE */
+	top: -45px;
+	right: -100px;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.7071067811865474, M12=-0.7071067811865477, M21=0.7071067811865477, M22=0.7071067811865474, SizingMethod='auto expand')";
+}
+</style>
+<![endif]-->
 <script type="text/javascript" src="js/external/classlist.js"></script>
 </head>
 <body>
+<div class="ribbon"><a href="https://github.com/vergnes/mines-sweeper" alt="Fork me on GitHub">Fork me on GitHub</a></div>
 <div id="commands">
 	<button onclick="controller.start();">New game</button>
 </div>
