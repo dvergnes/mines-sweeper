@@ -399,7 +399,7 @@ var controller = (function(model, view) {
 	
 	function start() {
 		console.log(window.install.state);
-		if (window.install.state !== 'installed') {
+		if (window.install.type !== 'unsupported' && window.install.state !== 'installed') {
 			console.log("application is not installed");
 			m_view.showInstall();
 		}
