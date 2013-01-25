@@ -128,7 +128,7 @@ define(function () {
         }
 
         var theseListeners = listeners[type] = listeners[type] || [];
-        if (theseListeners.indexOf(func) === -1) {
+        if (theseListeners.indexOf && theseListeners.indexOf(func) === -1) {
             theseListeners.push(func);
         }
     }

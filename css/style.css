@@ -1,7 +1,6 @@
 body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin: 0;
-	padding: 0;
 }
 
 .hidden {
@@ -15,6 +14,7 @@ body {
 	overflow: hidden;
 	height: 11em;
 	width: 11em;
+	z-index: 10;
 }
 
 .ribbon a {
@@ -30,28 +30,33 @@ body {
 	height: 1.5em;
 	top: 3em;
 	right: -4em;
-	text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+	text-shadow: 2px -1px 1px black;
 	/* FF3.6+ */
-	background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15) );
+	background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.00),
+		rgba(0, 0, 0, 0.15) );
 	/* Chrome,Safari4+ */
 	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.00)
 		), to(rgba(0, 0, 0, 0.15) ) );
 	/* Chrome10+,Safari5.1+ */
-	background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.00),	rgba(0, 0, 0, 0.15) );
+	background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.00),
+		rgba(0, 0, 0, 0.15) );
 	/* Opera 11.10+ */
-	background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15) );
+	background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0.00),
+		rgba(0, 0, 0, 0.15) );
 	/* IE10+ */
-	background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0.00),	rgba(0, 0, 0, 0.15) );
+	background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0.00),
+		rgba(0, 0, 0, 0.15) );
 	/* W3C */
-	background-image: linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15) );
+	background-image: linear-gradient(top, rgba(0, 0, 0, 0.00),
+		rgba(0, 0, 0, 0.15) );
 	-webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
 	-moz-transform: rotate(45deg);
 	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 	-webkit-transform: rotate(45deg);
-	-moz-transform : rotate( 45deg);
-	-o-transform : rotate( 45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 
@@ -66,13 +71,75 @@ body {
 	text-align: center;
 }
 
-#commands { /* Webkit browsers, IE9+ */
-	padding: 3vm;
-	/* W3C */
-	padding: 3vmin;
+.game {
+	padding-top: 4.5em;
 }
 
-.row,.cell,.flip div { /* Webkit browsers, IE9+ */
+.menu.active {
+	top: 0;
+}
+
+.menu {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: -95%;
+	top: -webkit-calc(-100% + 32px);
+	top: -moz-calc(-100% + 32px);
+	top: calc(-100% + 32px);
+	cursor: pointer;
+	background-color: #333;
+	background-color: rgba(3, 3, 3, 0.66);
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
+	z-index: 2;
+}
+
+.menu:after {
+	bottom: 0.4em;
+	color: white;
+	content: "menu";
+	left: 0;
+	right: 0;
+	text-align: center;
+	position: absolute;
+	text-transform: uppercase;
+}
+
+.menu button {
+	font-size: 4em;
+	font-size: 4vmin;
+	margin: 25% 1em;
+    /* margin: 42vh 4vmin;*/ 
+    padding: 1em 2em;
+	color: white;
+	text-shadow: 0 -2px 5px black;
+	background-color: #0074cc;
+	background-image: -moz-linear-gradient(top, #0088cc, #0055cc);
+	background-image: -ms-linear-gradient(top, #0088cc, #0055cc);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc),
+		to(#0055cc) );
+	background-image: -webkit-linear-gradient(top, #0088cc, #0055cc);
+	background-image: -o-linear-gradient(top, #0088cc, #0055cc);
+	background-image: linear-gradient(top, #0088cc, #0055cc);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc',
+		endColorstr='#0055cc', GradientType=0 );
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=  false );
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border: 1px solid white;
+}
+
+.transitionable {
+	-moz-transition: all 1s ease 0s;
+	-webkit-transition: all 1s ease 0s;
+	transition: all 1s ease 0s;
+}
+
+.row,.cell,.flip div {
+	/* Webkit browsers, IE9+ */
 	height: 11vm;
 	/* W3C */
 	height: 11vmin;

@@ -15,15 +15,24 @@
 	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.7071067811865474, M12=-0.7071067811865477, M21=0.7071067811865477, M22=0.7071067811865474, SizingMethod='auto expand')";
 }
 </style>
+<script type="text/javascript">
+document.createEvent = function(){
+	var mockEvent={};
+	mockEvent.initCustomEvent=function(){};
+	return mockEvent;
+};
+</script>
 <![endif]-->
 <script type="text/javascript" src="js/external/classlist.js"></script>
 <script type="text/javascript" src="js/external/lib.install.js"></script>
 </head>
 <body>
 <div class="ribbon"><a href="https://github.com/vergnes/mines-sweeper" alt="Fork me on GitHub">Fork me on GitHub</a></div>
-<div id="commands">
-	<button id="newGame">New game</button>
-	<button id="install" class="hidden">Install</button>
+<div class="menu transitionable" role="button">
+	<div id="commands" >
+		<button id="newGame">New game</button>
+		<button id="install" class="hidden">Install</button>
+	</div>
 </div>
 <div id="game" class="game"></div>
 <script type="text/javascript" src="js/mines.js"></script>

@@ -24,7 +24,7 @@ if (typeof (console) === 'undefined') {
 	console.group = console.groupEnd = console.log;
 }
 
-function addEventListener(element, event, f) {
+function addListener(element, event, f) {
 	if (element.addEventListener) {
 		element.addEventListener(event, f, false);
 	} else if (element.attachEvent) {
@@ -143,20 +143,31 @@ var view = (function() {
 	var longClick = false;
 	var clickHandler, newGameHandler, installHandler;
 	var gameElement = document.getElementById("game"),
-		installElement = document.getElementById("install");
+		installElement = document.getElementById("install"),
+		menuElement = document.querySelector(".menu");
 	var nbCellsByRow = 8;
 	var cellSize = 100;
-	var MIN_CELL_SIZE = 20;
+	var MIN_CELL_SIZE = 20,
+		MENU_OVERLAP = 48;
 	
-	addEventListener(document.getElementById("newGame"), "click", function(){
+	function toggleMenu(){
+		menuElement.classList.toggle("active");
+	}
+	
+	addListener(menuElement, "click", toggleMenu);
+//	addListener(menuElement, "touchstart", function(e){
+//		menuElement.classList.toggle("active");
+//	});
+	
+	addListener(document.getElementById("newGame"), "click", function(){
 		newGameHandler();
 	});
 	
-	addEventListener(installElement, "click", function(){
+	addListener(installElement, "click", function(){
 		installHandler();
 	});
 	
-	addEventListener(gameElement, "mouseup", function(e) {
+	addListener(gameElement, "mouseup", function(e) {
 		console.log("mouseup");
 		var el = findTarget(e);
 		if (!longClick && el) {
@@ -170,13 +181,13 @@ var view = (function() {
 
 		return false;
 	});
-	addEventListener(document, "contextmenu", function(e) {
+	addListener(document, "contextmenu", function(e) {
 		if (e.preventDefault) {
 			e.preventDefault();
 		}
 		return false;
 	});
-	addEventListener(gameElement, "touchstart", function(e) {
+	addListener(gameElement, "touchstart", function(e) {
 		console.log("touchstart");
 		longPressTimeout = setTimeout(function() {
 			longClick = true;
@@ -189,15 +200,15 @@ var view = (function() {
 			}
 		}, 500);
 	});
-	addEventListener(gameElement, "touchmove", function(e) {
+	addListener(gameElement, "touchmove", function(e) {
 		clearTimeout(longPressTimeout);
 	});
-	addEventListener(gameElement, "touchend", function(e) {
+	addListener(gameElement, "touchend", function(e) {
 		longClick = false;
 		clearTimeout(longPressTimeout);
 	});
 
-	addEventListener(window, "resize", function() {
+	addListener(window, "resize", function() {
 		/* Code from MDN https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/resize */
 		// ignore resize events as long as an actualResizeHandler execution is
 		// in the queue
@@ -275,7 +286,7 @@ var view = (function() {
 			winHeight = body.parentElement.clientHeight;
 		}
 		return Math.min(winWidth, winHeight
-				- document.getElementById("commands").offsetHeight);
+				- MENU_OVERLAP *3);
 	}
 
 	function computeCellSize() {
@@ -328,7 +339,7 @@ var view = (function() {
 		updateTileElementStyle(backElement);
 		flipElement.appendChild(backElement);
 		flipElement.appendChild(frontElement);
-		flipElement.className = "flip";
+		flipElement.className = "flip transitionable";
 		cellElement.appendChild(flipElement);
 		cellElement.className = "cell";
 		cellElement.setAttribute("role", "button");
@@ -399,7 +410,7 @@ var controller = (function(model, view) {
 	
 	function start() {
 		console.log(window.install.state);
-		if (window.install.state !== 'installed') {
+		if (window.install.type !== 'unsupported' && window.install.state !== 'installed') {
 			console.log("application is not installed");
 			m_view.showInstall();
 		}
