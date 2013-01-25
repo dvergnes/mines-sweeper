@@ -148,7 +148,7 @@ var view = (function() {
 	var nbCellsByRow = 8;
 	var cellSize = 100;
 	var MIN_CELL_SIZE = 20,
-		MENU_OVERLAP = 48;
+		MENU_OVERLAP = 32;
 	
 	function toggleMenu(){
 		menuElement.classList.toggle("active");
