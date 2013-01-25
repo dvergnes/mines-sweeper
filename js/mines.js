@@ -32,6 +32,10 @@ function addListener(element, event, f) {
 	}
 }
 
+function isTouchDevice(){
+	return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+}
+
 var model = (function() {
 	var m_bomb = 0, m_rows = 0, m_columns = 0;
 	var m_cells = [];
@@ -144,28 +148,31 @@ var view = (function() {
 	var clickHandler, newGameHandler, installHandler;
 	var gameElement = document.getElementById("game"),
 		installElement = document.getElementById("install"),
+		newGame = document.getElementById("newGame"),
 		menuElement = document.querySelector(".menu");
 	var nbCellsByRow = 8;
 	var cellSize = 100;
 	var MIN_CELL_SIZE = 20,
 		MENU_OVERLAP = 32;
 	
-	function toggleMenu(){
+	function toggleMenu() {
 		menuElement.classList.toggle("active");
 	}
 	
-	addListener(menuElement, "click", toggleMenu);
-//	addListener(menuElement, "touchstart", function(e){
-//		menuElement.classList.toggle("active");
-//	});
+	function onClickMenu(e){
+		var target = e.target;
+		if (target == newGame) {
+			newGameHandler();
+			toggleMenu();
+		} else if (target == installElement) {
+			installHandler();
+		} else {
+			toggleMenu();	
+		}
+	}
 	
-	addListener(document.getElementById("newGame"), "click", function(){
-		newGameHandler();
-	});
-	
-	addListener(installElement, "click", function(){
-		installHandler();
-	});
+	var eventType=isTouchDevice()?"touchstart":"click";
+	addListener(menuElement, eventType, onClickMenu);
 	
 	addListener(gameElement, "mouseup", function(e) {
 		console.log("mouseup");
@@ -409,8 +416,7 @@ var controller = (function(model, view) {
 	var m_cellRevealed = 0;
 	
 	function start() {
-		console.log(window.install.state);
-		if (window.install.type !== 'unsupported' && window.install.state !== 'installed') {
+		if (window.install.type !== 'unsupported' && window.install.state !== 'installed' && window.install.type !== 'chrome') {
 			console.log("application is not installed");
 			m_view.showInstall();
 		}
