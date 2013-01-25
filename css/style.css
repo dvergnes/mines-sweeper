@@ -110,7 +110,7 @@ body {
 	font-size: 4em;
 	font-size: 4vmin;
 	margin: 25% 1em;
-    /* margin: 42vh 4vmin;*/ 
+    margin: 42vh 4vmin; 
     padding: 1em 2em;
 	color: white;
 	text-shadow: 0 -2px 5px black;
