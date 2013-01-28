@@ -65,6 +65,7 @@ var model = (function() {
 				cell.m_trapped = false;
 				cell.m_bombs = 0;
 				cell.m_revealed = false;
+				cell.m_flagged = false;
 				setCell(j, i, cell);
 			}
 		}
@@ -126,8 +127,10 @@ var model = (function() {
 				if (currentCell.m_bombs === 0) {
 					visitNeighbours(currentCell, pushInQueue);
 				}
-				currentCell.m_revealed = true;
-				toReveal.push(currentCell);
+				if (!currentCell.m_flagged) {
+					currentCell.m_revealed = true;
+					toReveal.push(currentCell);					
+				}
 			}
 		}
 		return toReveal;
@@ -442,6 +445,7 @@ var controller = (function(model, view) {
 		var cell = m_model.getCell(row, col);
 		if (cell) {
 			if (rightOrLongClick && !cell.m_revealed) {
+				cell.m_flagged = !cell.m_flagged;
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
