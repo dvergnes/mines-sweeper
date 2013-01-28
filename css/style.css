@@ -81,6 +81,7 @@ body {
 
 .menu {
 	position: absolute;
+	overflow: hidden;
 	height: 100%;
 	width: 100%;
 	top: -95%;
@@ -107,9 +108,9 @@ body {
 }
 
 .menu button {
-	font-size: 2em;
-	font-size: 4vmin;
-	margin: 25% 1em;
+ 	font-size: 1em; 
+ 	font-size: 4vmin; 
+	margin: 45% 1em;
     margin: 42vh 4vmin; 
     padding: 1em 2em;
 	color: white;
