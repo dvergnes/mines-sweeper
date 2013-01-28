@@ -253,6 +253,7 @@ body {
 	background-size: contain;
 }
 
+
 .revealed .flip {
 	-moz-transform: rotateY(180deg);
 	-webkit-transform: rotateY(180deg);
