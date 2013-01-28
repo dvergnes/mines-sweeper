@@ -1,6 +1,6 @@
 {
-  "name": "Mines Sweeper",
-  "description": "Mines Sweeper",
+  "name": "Mine Sweeper",
+  "description": "Mine Sweeper",
   "launch_path": "/mines-sweeper/index.html",
   "version": "1.0",
   "installs_allowed_from": ["*"],
