@@ -370,6 +370,7 @@ var view = (function() {
 	}
 
 	function toggleFlag(i, j) {
+		vibrate(100);
 		toggleClass(i, j, "flagged");
 	}
 
@@ -401,7 +402,14 @@ var view = (function() {
 		installElement.classList.add("hidden");
 	}
 	
+	function vibrate(time) {
+		if (navigator.vibrate) {
+			navigator.vibrate(time);
+		}
+	}
+	
 	function gameOver(f) {
+		vibrate(1000);
 		gameElement.classList.add("revealed");
 		if (confirm("Boom ! You loose! Do you want to start a new game?")) {
 			f();
