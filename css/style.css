@@ -156,10 +156,15 @@ body {
 	margin: 0 auto;
 }
 
-.cell,.flip div { /* Webkit browsers */
+.cell,.flip div {
+	/* Webkit browsers */
 	width: 11vm;
 	/* W3C */
 	width: 11vmin;
+	/* Webkit browsers */
+	height: 11vm;
+	/* W3C */
+	height: 11vmin;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;

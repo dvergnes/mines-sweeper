@@ -174,13 +174,18 @@ var view = (function() {
 	var eventType=isTouchDevice()?"touchstart":"click";
 	addListener(menuElement, eventType, onClickMenu);
 	
+	addListener(document, "contextmenu", function(e) {
+		if (e.preventDefault) {
+			e.preventDefault();
+		}
+		return false;
+	});
 	addListener(gameElement, "mouseup", function(e) {
-		console.log("mouseup");
 		var el = findTarget(e);
 		if (!longClick && el) {
 			var row = indexOf(el.parentElement);
 			var col = indexOf(el);
-			console.log("cell(", row, ",", col, ") has been clicked");
+			console.log("cell("+ row+ ","+ col+ ") has been clicked");
 			var rightClick = (e.which && e.which === 3)
 					|| (e.button && e.button === 2) || longClick;
 			clickHandler(row, col, rightClick);
@@ -188,14 +193,7 @@ var view = (function() {
 
 		return false;
 	});
-	addListener(document, "contextmenu", function(e) {
-		if (e.preventDefault) {
-			e.preventDefault();
-		}
-		return false;
-	});
 	addListener(gameElement, "touchstart", function(e) {
-		console.log("touchstart");
 		longPressTimeout = setTimeout(function() {
 			longClick = true;
 			var el = findTarget(e);
@@ -327,6 +325,7 @@ var view = (function() {
 	
 	function updateCellElementStyle(cellElement) {
 		cellElement.style.width = cellSize + "px";
+		cellElement.style.height = cellSize + "px";
 		cellElement.style.fontSize = Math.floor(cellSize / 2) + "px";
 		cellElement.style.lineHeight = cellSize + "px";
 	}
