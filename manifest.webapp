@@ -8,8 +8,7 @@
     "name": "Denis Vergnes",
     "url": "https:/github.com/vergnes"
   },
-  "permissions": [
-  ],
+  "permissions": {},
   "default_locale": "en-US",
   "icons": {
   	"256": "/mines-sweeper/img/bomb-256.png",
