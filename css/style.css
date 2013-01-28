@@ -270,7 +270,7 @@ body {
 	/* W3C */
 	background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* IE6-9 */
-	z-index: 3;
+	z-index: 1;
 }
 
 .revealed .flip .trapped { /* Old browsers */
