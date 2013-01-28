@@ -6,7 +6,7 @@
   "installs_allowed_from": ["*"],
   "developer": {
     "name": "Denis Vergnes",
-    "url": "https:/github.com/vergnes"
+    "url": "https://github.com/vergnes"
   },
   "permissions": {},
   "default_locale": "en-US",
