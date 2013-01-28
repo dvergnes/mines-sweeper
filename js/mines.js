@@ -303,6 +303,7 @@ var view = (function() {
 
 	function reset(cells, rows, cols) {
 		gameElement.innerHTML = '';
+		gameElement.classList.remove("revealed");
 		nbCellsByRow = Math.max(rows, cols);
 		cellSize = computeCellSize();
 		for ( var i = 0; i < rows; i++) {
@@ -399,6 +400,10 @@ var view = (function() {
 	function hideInstall() {
 		installElement.classList.add("hidden");
 	}
+	
+	function gameOver() {
+		gameElement.classList.add("revealed");
+	}
 
 	return {
 		reset : reset,
@@ -409,6 +414,7 @@ var view = (function() {
 		toggleFlag : toggleFlag,
 		showInstall : showInstall,
 		hideInstall : hideInstall,
+		gameOver : gameOver
 	};
 })();
 
@@ -449,16 +455,7 @@ var controller = (function(model, view) {
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
-					m_view.reveal(cell.x, cell.y);
-					cell.m_revealed = true;
-					var cellsToReveal = m_model.cells();
-					var length = cellsToReveal.length;
-					for ( var i = 0; i < length; i++) {
-						var currentCell = cellsToReveal[i];
-						if (!currentCell.m_revealed) {
-							m_view.reveal(currentCell.x, currentCell.y);	
-						}
-					}
+					m_view.gameOver();
 					if (confirm("Boom ! You loose! Do you want to start a new game?")) {
 						newGame();
 					}
