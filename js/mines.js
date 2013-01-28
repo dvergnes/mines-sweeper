@@ -401,8 +401,17 @@ var view = (function() {
 		installElement.classList.add("hidden");
 	}
 	
-	function gameOver() {
+	function gameOver(f) {
 		gameElement.classList.add("revealed");
+		if (confirm("Boom ! You loose! Do you want to start a new game?")) {
+			f();
+		}
+	}
+	
+	function victory(f) {
+		if (confirm("You win! Do you want to start a new game?")) {
+			f();
+		}
 	}
 
 	return {
@@ -414,7 +423,8 @@ var view = (function() {
 		toggleFlag : toggleFlag,
 		showInstall : showInstall,
 		hideInstall : hideInstall,
-		gameOver : gameOver
+		gameOver : gameOver,
+		victory : victory
 	};
 })();
 
@@ -455,10 +465,7 @@ var controller = (function(model, view) {
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
-					m_view.gameOver();
-					if (confirm("Boom ! You loose! Do you want to start a new game?")) {
-						newGame();
-					}
+					m_view.gameOver(newGame);
 				} else {
 					var cellsToReveal = m_model.reveal(cell);
 					var length = cellsToReveal.length;
@@ -468,9 +475,7 @@ var controller = (function(model, view) {
 					}
 					m_cellRevealed += length;
 					if (m_model.getNbCellsForVictory() == m_cellRevealed) {
-						if (confirm("You win! Do you want to start a new game?")) {
-							newGame();
-						}
+						m_view.victory(newGame);
 					}
 				}
 			}
