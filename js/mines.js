@@ -185,7 +185,7 @@ var view = (function() {
 		if (!longClick && el) {
 			var row = indexOf(el.parentElement);
 			var col = indexOf(el);
-			console.log("cell("+ row+ ","+ col+ ") has been clicked");
+//			console.log("cell("+ row+ ","+ col+ ") has been clicked");
 			var rightClick = (e.which && e.which === 3)
 					|| (e.button && e.button === 2) || longClick;
 			clickHandler(row, col, rightClick);
@@ -200,7 +200,7 @@ var view = (function() {
 			if (el) {
 				var row = indexOf(el.parentElement);
 				var col = indexOf(el);
-				console.log("cell(", row, ",", col, ") has been long clicked");
+//				console.log("cell(", row, ",", col, ") has been long clicked");
 				clickHandler(row, col, true);
 			}
 		}, 500);
@@ -230,7 +230,7 @@ var view = (function() {
 		var newSize = computeCellSize();
 		if (cellSize !== newSize && newSize > MIN_CELL_SIZE) {
 			cellSize = newSize;
-			console.log("window resized, new cell size:",cellSize);
+//			console.log("window resized, new cell size:",cellSize);
 			var rowElements = document.querySelectorAll(".row");
 			for ( var i = 0; i < rowElements.length; i++) {
 				updateRowElementStyle(rowElements[i]);
@@ -386,7 +386,7 @@ var view = (function() {
 		if (rowElement && rowElement.children[j]) {
 			f(rowElement.children[j]);
 		} else {
-			console.log("cell (", i, ",", j, ") not found");
+			console.warn("cell (", i, ",", j, ") not found");
 		}
 	}
 	
@@ -426,7 +426,6 @@ var controller = (function(model, view) {
 		window.install();
 	}
 	window.install.addEventListener('change', function(e) {
-		console.log(e.detail);
 		if (e.detail === 'installed') {
 			m_view.hideInstall();
 		}
@@ -466,7 +465,7 @@ var controller = (function(model, view) {
 				}
 			}
 		} else {
-			console.log("Unable to find cell");
+			console.warn("Unable to find cell");
 		}
 
 	}
