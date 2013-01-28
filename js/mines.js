@@ -450,6 +450,15 @@ var controller = (function(model, view) {
 			} else {
 				if (cell.m_trapped) {
 					m_view.reveal(cell.x, cell.y);
+					cell.m_revealed = true;
+					var cellsToReveal = m_model.cells();
+					var length = cellsToReveal.length;
+					for ( var i = 0; i < length; i++) {
+						var currentCell = cellsToReveal[i];
+						if (!currentCell.m_revealed) {
+							m_view.reveal(currentCell.x, currentCell.y);	
+						}
+					}
 					if (confirm("Boom ! You loose! Do you want to start a new game?")) {
 						newGame();
 					}
