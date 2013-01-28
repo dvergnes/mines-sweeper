@@ -81,6 +81,7 @@ body {
 
 .menu {
 	position: absolute;
+	overflow: hidden;
 	height: 100%;
 	width: 100%;
 	top: -95%;
@@ -107,9 +108,9 @@ body {
 }
 
 .menu button {
-	font-size: 2em;
-	font-size: 4vmin;
-	margin: 25% 1em;
+ 	font-size: 1em; 
+ 	font-size: 4vmin; 
+	margin: 45% 1em;
     margin: 42vh 4vmin; 
     padding: 1em 2em;
 	color: white;
@@ -155,10 +156,15 @@ body {
 	margin: 0 auto;
 }
 
-.cell,.flip div { /* Webkit browsers */
+.cell,.flip div {
+	/* Webkit browsers */
 	width: 11vm;
 	/* W3C */
 	width: 11vmin;
+	/* Webkit browsers */
+	height: 11vm;
+	/* W3C */
+	height: 11vmin;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -247,6 +253,7 @@ body {
 	background-size: contain;
 }
 
+
 .revealed .flip {
 	-moz-transform: rotateY(180deg);
 	-webkit-transform: rotateY(180deg);
@@ -269,7 +276,7 @@ body {
 	/* W3C */
 	background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
 	/* IE6-9 */
-	z-index: 3;
+	z-index: 1;
 }
 
 .revealed .flip .trapped { /* Old browsers */

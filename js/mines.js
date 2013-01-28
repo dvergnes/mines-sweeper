@@ -65,6 +65,7 @@ var model = (function() {
 				cell.m_trapped = false;
 				cell.m_bombs = 0;
 				cell.m_revealed = false;
+				cell.m_flagged = false;
 				setCell(j, i, cell);
 			}
 		}
@@ -126,8 +127,10 @@ var model = (function() {
 				if (currentCell.m_bombs === 0) {
 					visitNeighbours(currentCell, pushInQueue);
 				}
-				currentCell.m_revealed = true;
-				toReveal.push(currentCell);
+				if (!currentCell.m_flagged) {
+					currentCell.m_revealed = true;
+					toReveal.push(currentCell);					
+				}
 			}
 		}
 		return toReveal;
@@ -174,13 +177,18 @@ var view = (function() {
 	var eventType=isTouchDevice()?"touchstart":"click";
 	addListener(menuElement, eventType, onClickMenu);
 	
+	addListener(document, "contextmenu", function(e) {
+		if (e.preventDefault) {
+			e.preventDefault();
+		}
+		return false;
+	});
 	addListener(gameElement, "mouseup", function(e) {
-		console.log("mouseup");
 		var el = findTarget(e);
 		if (!longClick && el) {
 			var row = indexOf(el.parentElement);
 			var col = indexOf(el);
-			console.log("cell(", row, ",", col, ") has been clicked");
+//			console.log("cell("+ row+ ","+ col+ ") has been clicked");
 			var rightClick = (e.which && e.which === 3)
 					|| (e.button && e.button === 2) || longClick;
 			clickHandler(row, col, rightClick);
@@ -188,21 +196,14 @@ var view = (function() {
 
 		return false;
 	});
-	addListener(document, "contextmenu", function(e) {
-		if (e.preventDefault) {
-			e.preventDefault();
-		}
-		return false;
-	});
 	addListener(gameElement, "touchstart", function(e) {
-		console.log("touchstart");
 		longPressTimeout = setTimeout(function() {
 			longClick = true;
 			var el = findTarget(e);
 			if (el) {
 				var row = indexOf(el.parentElement);
 				var col = indexOf(el);
-				console.log("cell(", row, ",", col, ") has been long clicked");
+//				console.log("cell(", row, ",", col, ") has been long clicked");
 				clickHandler(row, col, true);
 			}
 		}, 500);
@@ -232,7 +233,7 @@ var view = (function() {
 		var newSize = computeCellSize();
 		if (cellSize !== newSize && newSize > MIN_CELL_SIZE) {
 			cellSize = newSize;
-			console.log("window resized, new cell size:",cellSize);
+//			console.log("window resized, new cell size:",cellSize);
 			var rowElements = document.querySelectorAll(".row");
 			for ( var i = 0; i < rowElements.length; i++) {
 				updateRowElementStyle(rowElements[i]);
@@ -302,6 +303,7 @@ var view = (function() {
 
 	function reset(cells, rows, cols) {
 		gameElement.innerHTML = '';
+		gameElement.classList.remove("revealed");
 		nbCellsByRow = Math.max(rows, cols);
 		cellSize = computeCellSize();
 		for ( var i = 0; i < rows; i++) {
@@ -327,6 +329,7 @@ var view = (function() {
 	
 	function updateCellElementStyle(cellElement) {
 		cellElement.style.width = cellSize + "px";
+		cellElement.style.height = cellSize + "px";
 		cellElement.style.fontSize = Math.floor(cellSize / 2) + "px";
 		cellElement.style.lineHeight = cellSize + "px";
 	}
@@ -367,6 +370,7 @@ var view = (function() {
 	}
 
 	function toggleFlag(i, j) {
+		vibrate(100);
 		toggleClass(i, j, "flagged");
 	}
 
@@ -387,7 +391,7 @@ var view = (function() {
 		if (rowElement && rowElement.children[j]) {
 			f(rowElement.children[j]);
 		} else {
-			console.log("cell (", i, ",", j, ") not found");
+			console.warn("cell (", i, ",", j, ") not found");
 		}
 	}
 	
@@ -396,6 +400,26 @@ var view = (function() {
 	}
 	function hideInstall() {
 		installElement.classList.add("hidden");
+	}
+	
+	function vibrate(time) {
+		if (navigator.vibrate) {
+			navigator.vibrate(time);
+		}
+	}
+	
+	function gameOver(f) {
+		vibrate(1000);
+		gameElement.classList.add("revealed");
+		if (confirm("Boom ! You loose! Do you want to start a new game?")) {
+			f();
+		}
+	}
+	
+	function victory(f) {
+		if (confirm("You win! Do you want to start a new game?")) {
+			f();
+		}
 	}
 
 	return {
@@ -407,6 +431,8 @@ var view = (function() {
 		toggleFlag : toggleFlag,
 		showInstall : showInstall,
 		hideInstall : hideInstall,
+		gameOver : gameOver,
+		victory : victory
 	};
 })();
 
@@ -427,7 +453,6 @@ var controller = (function(model, view) {
 		window.install();
 	}
 	window.install.addEventListener('change', function(e) {
-		console.log(e.detail);
 		if (e.detail === 'installed') {
 			m_view.hideInstall();
 		}
@@ -444,13 +469,11 @@ var controller = (function(model, view) {
 		var cell = m_model.getCell(row, col);
 		if (cell) {
 			if (rightOrLongClick && !cell.m_revealed) {
+				cell.m_flagged = !cell.m_flagged;
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
 				if (cell.m_trapped) {
-					m_view.reveal(cell.x, cell.y);
-					if (confirm("Boom ! You loose! Do you want to start a new game?")) {
-						newGame();
-					}
+					m_view.gameOver(newGame);
 				} else {
 					var cellsToReveal = m_model.reveal(cell);
 					var length = cellsToReveal.length;
@@ -460,14 +483,12 @@ var controller = (function(model, view) {
 					}
 					m_cellRevealed += length;
 					if (m_model.getNbCellsForVictory() == m_cellRevealed) {
-						if (confirm("You win! Do you want to start a new game?")) {
-							newGame();
-						}
+						m_view.victory(newGame);
 					}
 				}
 			}
 		} else {
-			console.log("Unable to find cell");
+			console.warn("Unable to find cell");
 		}
 
 	}
