@@ -2,7 +2,7 @@ mines-sweeper
 =============
 
 This application is the famous mines-sweeper full HTML, JS, CSS implementation.
-You can visit the [Demo page](https://vergnes.github.com/mines-sweeper/ "Demo page") to have a try.
+You can visit the [Demo page](http://vergnes.github.com/mines-sweeper/ "Demo page") to have a try.
 
 Licence
 =======
