@@ -472,19 +472,21 @@ var controller = (function(model, view) {
 				cell.m_flagged = !cell.m_flagged;
 				m_view.toggleFlag(cell.x, cell.y);
 			} else {
-				if (cell.m_trapped) {
-					m_view.gameOver(newGame);
-				} else {
-					var cellsToReveal = m_model.reveal(cell);
-					var length = cellsToReveal.length;
-					for ( var i = 0; i < length; i++) {
-						var currentCell = cellsToReveal[i];
-						m_view.reveal(currentCell.x, currentCell.y);
-					}
-					m_cellRevealed += length;
-					if (m_model.getNbCellsForVictory() == m_cellRevealed) {
-						m_view.victory(newGame);
-					}
+				if (!cell.m_flagged) {
+					if (cell.m_trapped) {
+						m_view.gameOver(newGame);
+					} else {
+						var cellsToReveal = m_model.reveal(cell);
+						var length = cellsToReveal.length;
+						for ( var i = 0; i < length; i++) {
+							var currentCell = cellsToReveal[i];
+							m_view.reveal(currentCell.x, currentCell.y);
+						}
+						m_cellRevealed += length;
+						if (m_model.getNbCellsForVictory() == m_cellRevealed) {
+							m_view.victory(newGame);
+						}
+					}	
 				}
 			}
 		} else {
